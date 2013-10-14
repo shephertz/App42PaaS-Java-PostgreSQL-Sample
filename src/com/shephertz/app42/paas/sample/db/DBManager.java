@@ -3,8 +3,12 @@ package com.shephertz.app42.paas.sample.db;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import javax.sql.DataSource;
+import javax.xml.crypto.Data;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -74,6 +78,8 @@ public class DBManager {
 			}
 		} catch (Exception e) {
 			throw new Exception("Error executing query: " + sqlQuery);
+		} finally {
+			dataSource.getConnection().close();
 		}
 		return resultList;
 
@@ -85,7 +91,7 @@ public class DBManager {
 	 * @param query
 	 * @throws SQLException
 	 */
-	public void insert(final String query) {
+	public void insert(final String query) throws Exception{
 		JdbcTemplate db = new JdbcTemplate(DBManager.getInstance()
 				.getDataSource());
 
@@ -100,7 +106,8 @@ public class DBManager {
 				return ps;
 			}
 		}, keyHolder);
-
+		dataSource.getConnection().close();
+		
 	}
 
 	/*
